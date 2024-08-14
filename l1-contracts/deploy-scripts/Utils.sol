@@ -8,6 +8,7 @@ import {Vm} from "forge-std/Vm.sol";
 import {Bridgehub} from "contracts/bridgehub/Bridgehub.sol";
 import {L2TransactionRequestDirect} from "contracts/bridgehub/IBridgehub.sol";
 import {IGovernance} from "contracts/governance/IGovernance.sol";
+import {Call} from "contracts/governance/Common.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {REQUIRED_L2_GAS_PRICE_PER_PUBDATA} from "contracts/common/Config.sol";
@@ -307,8 +308,8 @@ library Utils {
         IGovernance governance = IGovernance(_governor);
         Ownable ownable = Ownable(_governor);
 
-        IGovernance.Call[] memory calls = new IGovernance.Call[](1);
-        calls[0] = IGovernance.Call({target: _target, value: _value, data: _data});
+        Call[] memory calls = new Call[](1);
+        calls[0] = Call({target: _target, value: _value, data: _data});
 
         IGovernance.Operation memory operation = IGovernance.Operation({
             calls: calls,
