@@ -13,6 +13,7 @@ import {IZkSyncHyperchain} from "contracts/state-transition/chain-interfaces/IZk
 import {ValidatorTimelock} from "contracts/state-transition/ValidatorTimelock.sol";
 import {Governance} from "contracts/governance/Governance.sol";
 import {ChainAdmin} from "contracts/governance/ChainAdmin.sol";
+import {AccessControlRestriction} from "contracts/governance/AccessControlRestriction.sol"; 
 import {Utils} from "./Utils.sol";
 import {PubdataPricingMode} from "contracts/state-transition/chain-deps/ZkSyncHyperchainStorage.sol";
 import {IL1NativeTokenVault} from "contracts/bridge/interfaces/IL1NativeTokenVault.sol";
@@ -174,8 +175,13 @@ contract RegisterHyperchainScript is Script {
 
     function deployChainAdmin() internal {
         vm.broadcast();
-        ChainAdmin chainAdmin = new ChainAdmin(config.ownerAddress);
-        console.log("ChainAdmin deployed at:", address(chainAdmin));
+        AccessControlRestriction restriction = new AccessControlRestriction(0, config.ownerAddress);
+
+        address[] memory restrictions = new address[](1);
+        restrictions[0] = address(restriction);
+
+        vm.broadcast();
+        ChainAdmin chainAdmin = new ChainAdmin(restrictions);
         config.chainAdmin = address(chainAdmin);
     }
 
