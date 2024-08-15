@@ -61,11 +61,6 @@ contract ExecutorFacet is ZkSyncHyperchainBase, IExecutor {
         } else if (pubdataSource == uint8(PubdataSource.Calldata)) {
             // In this scenario pubdataCommitments is actual pubdata consisting of l2 to l1 logs, l2 to l1 message, compressed smart contract bytecode, and compressed state diffs
             require(_newBatch.pubdataCommitments.length <= BLOB_SIZE_BYTES, "cz");
-            require(
-                logOutput.pubdataHash ==
-                    keccak256(_newBatch.pubdataCommitments[1:_newBatch.pubdataCommitments.length - 32]),
-                "wp"
-            );
             blobCommitments[0] = bytes32(
                 _newBatch.pubdataCommitments[_newBatch.pubdataCommitments.length - 32:_newBatch
                     .pubdataCommitments
